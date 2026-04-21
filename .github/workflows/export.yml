@@ -1,33 +1,34 @@
-name: Gerar Addon Instalavel
+name: Publicar Addon
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch: # Permite que você rode o robô manualmente se quiser
+    tags:
+      - 'v*' # O robô vai rodar sempre que você criar uma tag (ex: v1.0)
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do codigo
+      - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Criar Pacote .mcaddon
+      - name: Criar Pacotes Separados
         run: |
-          # Remove arquivos antigos se existirem para não dar conflito
-          rm -f meu_addon_projeto.mcaddon
+          # Criando o Behavior Pack (.mcpack)
+          cd BP && zip -r ../MeuAddon_BP.mcpack * && cd ..
           
-          # Zipa apenas o conteúdo das pastas BP e RP
-          # O comando garante que o manifest.json estará no lugar certo
-          zip -r meu_addon_projeto.mcaddon BP RP
+          # Criando o Resource Pack (.mcpack)
+          cd RP && zip -r ../MeuAddon_RP.mcpack * && cd ..
           
-          # Renomeia para garantir a extensão correta (opcional, mas seguro)
-          mv meu_addon_projeto.mcaddon meu_addon_v1.mcaddon
+          # Criando o Addon Completo (.mcaddon)
+          zip -r MeuAddon_Completo.mcaddon BP RP
 
-      - name: Disponibilizar para Download
-        uses: actions/upload-artifact@v4
+      - name: Criar Release no GitHub
+        uses: softprops/action-gh-release@v1
         with:
-          name: Addon_Pronto_1.26
-          path: meu_addon_v1.mcaddon
-          if-no-files-found: error
+          files: |
+            MeuAddon_BP.mcpack
+            MeuAddon_RP.mcpack
+            MeuAddon_Completo.mcaddon
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
