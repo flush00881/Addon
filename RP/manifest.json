@@ -1,12 +1,13 @@
 {
-  "format_version": "1.20.10",
+  "format_version": "1.21.10",
   "minecraft:item": {
     "description": {
       "identifier": "meu:espada_super"
     },
     "components": {
-      "minecraft:icon": "espada_super_icon",
-      "minecraft:render_offsets": "apple" 
+      "minecraft:icon": { "texture": "espada_super_icon" },
+      "minecraft:geometry": { "value": "geometry.espada_custom" },
+      "minecraft:render_offsets": "tools"
     }
   }
 }
