@@ -1,34 +1,38 @@
-name: Publicar Addon
+name: Gerar Downloads Separados
 
 on:
   push:
-    tags:
-      - 'v*' # O robô vai rodar sempre que você criar uma tag (ex: v1.0)
+    branches:
+      - main
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do código
+      - name: Checkout do codigo
         uses: actions/checkout@v4
 
-      - name: Criar Pacotes Separados
+      - name: Criar Pacotes
         run: |
-          # Criando o Behavior Pack (.mcpack)
-          cd BP && zip -r ../MeuAddon_BP.mcpack * && cd ..
-          
-          # Criando o Resource Pack (.mcpack)
-          cd RP && zip -r ../MeuAddon_RP.mcpack * && cd ..
-          
-          # Criando o Addon Completo (.mcaddon)
-          zip -r MeuAddon_Completo.mcaddon BP RP
+          # Criando os arquivos individuais
+          zip -r Comportamento.mcpack BP
+          zip -r Texturas.mcpack RP
+          zip -r Addon_Completo.mcaddon BP RP
 
-      - name: Criar Release no GitHub
-        uses: softprops/action-gh-release@v1
+      - name: Upload Behavior Pack
+        uses: actions/upload-artifact@v4
         with:
-          files: |
-            MeuAddon_BP.mcpack
-            MeuAddon_RP.mcpack
-            MeuAddon_Completo.mcaddon
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: Download_BP_Separado
+          path: Comportamento.mcpack
+
+      - name: Upload Resource Pack
+        uses: actions/upload-artifact@v4
+        with:
+          name: Download_RP_Separado
+          path: Texturas.mcpack
+
+      - name: Upload Addon Completo
+        uses: actions/upload-artifact@v4
+        with:
+          name: Download_Addon_Completo
+          path: Addon_Completo.mcaddon
