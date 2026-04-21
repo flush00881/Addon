@@ -1,1 +1,17 @@
-
+{
+    "format_version": 2,
+    "header": {
+        "name": "Meu Addon (BP)",
+        "description": "Logica do meu addon criado pelo GitHub",
+        "uuid": "4391694b-1798-467f-94d0-61b697672261",
+        "version": [1, 0, 0],
+        "min_engine_version": [1, 20, 0]
+    },
+    "modules": [
+        {
+            "type": "data",
+            "uuid": "78747470-3a2f-2f6d-696e-656372616674",
+            "version": [1, 0, 0]
+        }
+    ]
+}
