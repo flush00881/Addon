@@ -1,0 +1,9 @@
+{
+  "resource_pack_name": "meu_addon",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "espada_super_icon": {
+      "textures": "textures/items/espada_super"
+    }
+  }
+}
