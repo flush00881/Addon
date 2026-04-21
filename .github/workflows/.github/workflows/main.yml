@@ -1,0 +1,23 @@
+name: Build MCAddon
+on:
+  push:
+    branches:
+      - main  # Executa sempre que você atualizar a branch principal
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Pack Addon
+        run: |
+          # Cria um arquivo zip contendo as pastas BP e RP
+          zip -r MyAddon.mcaddon BP RP README.md
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: MeuAddon-Pronto-Para-Instalar
+          path: MyAddon.mcaddon
