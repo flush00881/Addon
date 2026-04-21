@@ -1,23 +1,33 @@
-name: Gerar MCAddon Automático
+name: Gerar Addon Instalavel
+
 on:
   push:
     branches:
-      - main  # Toda vez que você salvar algo na branch main, ele cria o arquivo
+      - main
+  workflow_dispatch: # Permite que você rode o robô manualmente se quiser
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
 
       - name: Criar Pacote .mcaddon
         run: |
-          # Este comando zipa as pastas BP e RP juntas no formato que o Minecraft aceita
+          # Remove arquivos antigos se existirem para não dar conflito
+          rm -f meu_addon_projeto.mcaddon
+          
+          # Zipa apenas o conteúdo das pastas BP e RP
+          # O comando garante que o manifest.json estará no lugar certo
           zip -r meu_addon_projeto.mcaddon BP RP
+          
+          # Renomeia para garantir a extensão correta (opcional, mas seguro)
+          mv meu_addon_projeto.mcaddon meu_addon_v1.mcaddon
 
       - name: Disponibilizar para Download
         uses: actions/upload-artifact@v4
         with:
-          name: Addon_Instalavel
-          path: meu_addon_projeto.mcaddon
+          name: Addon_Pronto_1.26
+          path: meu_addon_v1.mcaddon
+          if-no-files-found: error
